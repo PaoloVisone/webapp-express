@@ -2,10 +2,10 @@ const express = require('express')
 const app = express()
 // importiamo il middleware di CORS
 // const cors = require('cors')
-const port = 3000
+const port = process.env.PORT
 
 // Importo il router
-// const postRouter = require('./routers/posts');
+const moviesRouter = require('./router/movies');
 
 // middlewares errorsHandler
 const errorsHandler = require("./middlewares/errorHandler");
@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 });
 
 // Rotta
-// app.use("/posts", postRouter)
+app.use("/api/movies", moviesRouter)
 
 // Registo il middlewares errorsHandler
 app.use(errorsHandler);
