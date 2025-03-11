@@ -3,6 +3,17 @@ const connection = require('../data/db');
 
 function index(req, res) {
 
+    // Query
+    const sql = "SELECT * FROM movies;";
+
+    // Conntetto la query
+    connection.query(sql, (err, result) => {
+        // In caso di errore
+        if (err) return res.serverStatus(500).json({ error: 'Database query failed' });
+        // Altrimenti..
+        res.json(result)
+
+    })
 }
 
 function show(req, res) {
