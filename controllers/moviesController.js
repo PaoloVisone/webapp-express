@@ -10,9 +10,18 @@ function index(req, res) {
     connection.query(sql, (err, result) => {
         // In caso di errore
         if (err) return res.serverStatus(500).json({ error: 'Database query failed' });
+
+        // map del risultato
+        const movies = result.map(movie => {
+            return {
+                ...movie,
+                image: req.imagePath + movie.image
+            }
+        })
+
         // Altrimenti..
-        res.json(result)
-    })
+        res.json(movies)
+    });
 }
 
 function show(req, res) {
