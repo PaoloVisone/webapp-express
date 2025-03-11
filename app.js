@@ -13,8 +13,14 @@ const errorsHandler = require("./middlewares/errorHandler");
 // middlewares notFound
 const notFound = require("./middlewares/notFound");
 
+// middlewares img
+const imagePathMiddelware = require("./middlewares/imgPath")
+
 // registro il middleware di CORS
 // app.use(cors({ origin: 'http://localhost:5173' }))
+
+// Registo il middlewares imgPath
+app.use(imagePathMiddelware);
 
 // Registro il body-parser
 app.use(express.json());
