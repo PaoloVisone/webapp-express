@@ -1,7 +1,8 @@
 const express = require('express')
 const app = express()
 // importiamo il middleware di CORS
-// const cors = require('cors')
+const cors = require('cors')
+
 const port = process.env.PORT
 
 // Importo il router
@@ -17,7 +18,7 @@ const notFound = require("./middlewares/notFound");
 const imagePathMiddelware = require("./middlewares/imgPath")
 
 // registro il middleware di CORS
-// app.use(cors({ origin: 'http://localhost:5173' }))
+app.use(cors({ origin: process.env.FE_PORT }))
 
 // Registo il middlewares imgPath
 app.use(imagePathMiddelware);
