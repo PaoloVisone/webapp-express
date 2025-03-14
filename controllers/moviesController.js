@@ -9,7 +9,7 @@ function index(req, res) {
     // Conntetto la query
     connection.query(sql, (err, result) => {
         // In caso di errore
-        if (err) return res.serverStatus(500).json({ error: 'Database query failed' });
+        if (err) return res.status(500).json({ error: 'Database query failed' });
 
         // map del risultato
         const movies = result.map(movie => {
@@ -36,28 +36,31 @@ function show(req, res) {
     const paramsReviews = "SELECT * FROM reviews WHERE movie_id = ?";
 
     // Conntetto la query
-    connection.query(paramsMovies, [id], (err, moviesResult) => {
+    connection.query(paramsMovies, [id], (err, movieResult) => {
         // In caso di errore
-        if (err) return res.serverStatus(500).json({ error: 'Database query failed' });
+        if (err) return res.status(500).json({ error: 'Database query failed' });
         // Se la risposta è un array vuoto
-        if (moviesResult.length === 0) return res.serverStatus(404).json({ error: 'Not found' })
+        if (movieResult.length === 0) return res.serverStatus(404).json({ error: 'Not found' })
         // Altrimenti..
         // res.json(result[0])
 
         // salviamo il risultato in una variabile
-        const movies = moviesResult[0];
+        const movie = movieResult[0];
 
 
         // Conntetto la query
         connection.query(paramsReviews, [id], (err, reviewResult) => {
             // In caso di errore
-            if (err) return res.serverStatus(500).json({ error: 'Database query failed' });
+            if (err) return res.status(500).json({ error: 'Database query failed' });
             // Altrimenti..
             // aggiungiamo la proprietà reviews al risultato
-            movies.reviews = reviewResult;
+            movie.reviews = reviewResult;
+
+            // aggiungiamo il valore path img da middleware
+            movie.image = req.imagePath + movie.image;
 
             // Risultato
-            res.json(movies)
+            res.json(movie)
         })
 
 
@@ -65,6 +68,27 @@ function show(req, res) {
 }
 
 function store(req, res) {
+
+}
+
+function storeReviews(req, res) {
+
+    // Parametri Id
+    const { id } = req.params;
+
+    // Destructuring dei valori
+    const { name, vote, text } = req.body
+
+    // Query
+    const dataReviewsSql = 'INSERT INTO reviews (name, vote, text, movie_id) VALUES (?, ?, ?, ?)'
+
+    // Connetto la query
+    connection.query(dataReviewsSql, [name, text, vote, id], (err, result) => {
+        if (err) return res.status(500).json({ error: 'Database query failed' });
+        res.status(201);
+        // Messaggio di conferma
+        res.json({ message: 'Add reviews', id: result, insertId })
+    })
 
 }
 
@@ -81,4 +105,4 @@ function destroy(req, res) {
 }
 
 // esportiamo tutto
-module.exports = { index, show, store, update, modify, destroy }
+module.exports = { index, show, store, storeReviews, update, modify, destroy }
