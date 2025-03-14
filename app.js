@@ -15,7 +15,7 @@ const errorsHandler = require("./middlewares/errorHandler");
 const notFound = require("./middlewares/notFound");
 
 // middlewares img
-const imagePathMiddelware = require("./middlewares/imgPath")
+const imagePathMiddelware = require("./middlewares/imgPath");
 
 // registro il middleware di CORS
 app.use(cors({ origin: process.env.FE_PORT }))
