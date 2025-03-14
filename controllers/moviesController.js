@@ -67,7 +67,33 @@ function show(req, res) {
     });
 }
 
-function store(req, res) {
+function store(req, res, next) {
+
+    // Dati inviati dal client al server
+    const { title, director, abstract } = req.body
+
+    // Salvo la variabile dell'immagine con nuovo nome
+    const imageName = `${req.file.filename}`;
+
+    // Query
+    const query = 'INSERT INTO movies (name, vote, text, movie_id) VALUES (?, ?, ?, ?)'
+
+    // 
+    connection.query(query, [title, director, imageName, abstract], (err, result) => {
+        if (err) {
+            console.log(err)
+            return next(new Error("Errore server"));
+        }
+
+        res.status(201).json({
+            status: "success",
+            message: "Creato con successo!"
+        })
+
+        // Messaggio di conferma
+        res.json({ message: 'Add reviews', id: result, insertId })
+    })
+
 
 }
 
