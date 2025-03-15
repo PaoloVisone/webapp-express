@@ -76,9 +76,8 @@ function store(req, res, next) {
     const imageName = `${req.file.filename}`;
 
     // Query
-    const query = 'INSERT INTO movies (name, vote, text, movie_id) VALUES (?, ?, ?, ?)'
+    const query = 'INSERT INTO movies (name, director, text, image) VALUES (?, ?, ?, ?)'
 
-    // 
     connection.query(query, [title, director, imageName, abstract], (err, result) => {
         if (err) {
             console.log(err)
